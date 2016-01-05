@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
+  <channel>
+    <title><%-: config.title | cdata %></title>
+    <link><%- encodeURI(url) %></link>
+    <copyright>&amp;#x2117; &amp;amp; &amp;#xA9; 2016 JSNext.fm</copyright>
+
+    <itunes:author>JSNext.fm</itunes:author>
+    <itunes:image href=""></itunes:image>
+    <itunes:summary>JSNext Podcast 是由 Randy, Howard, 阴明 主持的前端技术类中文播客节目，讨论时下前端技术相关的一切，争取每期邀请符合主题的优秀工程师一起聊聊。希望用 podcast 形式记录前端技术发展重要的每一步。</itunes:summary>
+    <itunes:category text="Technology"/>
+    <itunes:category text="Software How-To"/>
+    <language>zh-CN</language>
+
+    <atom:link href="<%- encodeURI(feed_url) %>" rel="self" type="application/rss+xml"/>
+    <description><%-: config.description | cdata %></description>
+    <pubDate><%= posts.first().updated.toDate().toUTCString() %></pubDate>
+    <generator>http://hexo.io/</generator>
+    <% posts.each(function(post){ %>
+    <item>
+      <title><%-: post.title | cdata %></title>
+      <link><%- encodeURI(url + post.path) %></link>
+
+      <itunes:author>JSNext.fm</itunes:author>
+      <itunes:duration><%- post.duration %></itunes:duration>
+      <itunes:subtitle><%- post.excerpt %></itunes:subtitle>
+      <% if(post.excerpt) { %>
+        <itunes:summary type="html"><%- escape(post.excerpt) %></itunes:summary>
+      <% } %>
+      <enclosure url="<%- post.source %>" type="audio/mpeg" />
+
+      <guid><%- encodeURI(url + post.path) %></guid>
+      <pubDate><%= post.date.toDate().toUTCString() %></pubDate>
+      <description>
+      <% if (post.description){ %><%-: post.description | cdata %>
+      <% } else if (post.excerpt){ %><%-: post.excerpt | cdata %>
+      <% } else {%><%-: post.content.substring(0, 140) | cdata %><% } %>
+      </description>
+      <content:encoded><%-: post.content | cdata %></content:encoded>
+      <% if (post.comments){ %><comments><%- encodeURI(url + post.path) %>#disqus_thread</comments><% } %>
+    </item>
+    <% }) %>
+  </channel>
+</rss>
